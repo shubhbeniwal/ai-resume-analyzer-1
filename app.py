@@ -1,21 +1,23 @@
 import streamlit as st
+import re
 
 from utils.pdf_reader import extract_text_from_pdf
 from utils.gemini_analyzer import analyze_resume
+from utils.pdf_generator import generate_pdf_report
 
 # ---------------------------
 # PAGE CONFIG
 # ---------------------------
 st.set_page_config(
-    page_title="AI Resume Analyzer | Shubh Beniwal",
+    page_title="AI Resume & Job Match Analyzer | Shubh Beniwal",
     page_icon="📄",
     layout="wide"
 )
 
 # ---------------------------
-# HEADER / BRANDING
+# HEADER
 # ---------------------------
-st.title("📄 AI Resume Analyzer")
+st.title("📄 AI Resume & Job Match Analyzer")
 
 st.markdown("""
 ### AI-Powered Resume Evaluation Platform
@@ -23,10 +25,11 @@ st.markdown("""
 Get intelligent feedback on your resume using Large Language Models (LLMs).
 
 #### Features
-- ATS-style Resume Review
+- ATS Match Score
+- Resume Analysis
+- Job Description Matching
 - Skill Gap Analysis
 - Resume Improvement Suggestions
-- AI-Powered Resume Insights
 
 👨‍💻 Built by **Shubh Beniwal**
 """)
@@ -34,24 +37,24 @@ Get intelligent feedback on your resume using Large Language Models (LLMs).
 st.divider()
 
 # ---------------------------
-# SIDEBAR (IDENTITY + PROJECT CONTEXT)
+# SIDEBAR
 # ---------------------------
 st.sidebar.title("👨‍💻 Developer")
 
 st.sidebar.markdown("""
 ### Shubh Beniwal
 
-**AI & Robotics Engineer**
+**AI & ML Engineer**
 
-VIT Chennai
+VIT Chennai Graduate | Passionate about AI, LLMs, NLP, and Software Engineering
 
 ---
 
 ### Project
 
-AI Resume Analyzer
+AI Resume & Job Match Analyzer
 
-Built to simulate how modern ATS and AI-powered hiring systems evaluate resumes.
+Built to simulate how modern ATS and AI-powered hiring systems evaluate resumes against job descriptions.
 
 ---
 
@@ -59,7 +62,8 @@ Built to simulate how modern ATS and AI-powered hiring systems evaluate resumes.
 
 - Python
 - Streamlit
-- LLMs (Gemini / Groq)
+- Groq LLM
+- ReportLab
 - PDF Processing
 
 ---
@@ -76,13 +80,32 @@ st.sidebar.markdown(
 )
 
 # ---------------------------
-# MAIN UI
+# INPUTS
 # ---------------------------
 uploaded_file = st.file_uploader(
     "📎 Upload Your Resume (PDF)",
     type=["pdf"]
 )
 
+job_description = st.text_area(
+    "💼 Paste Job Description (Optional)",
+    height=200,
+    placeholder="""
+Paste the job description here...
+
+Example:
+We are looking for a Python Developer with experience in:
+- Python
+- SQL
+- Machine Learning
+- AWS
+- Docker
+"""
+)
+
+# ---------------------------
+# ANALYSIS
+# ---------------------------
 if uploaded_file:
 
     with st.spinner("📖 Reading Resume..."):
@@ -95,15 +118,107 @@ if uploaded_file:
     if st.button("🚀 Analyze Resume"):
 
         with st.spinner("🧠 AI is analyzing your resume..."):
-            analysis = analyze_resume(resume_text)
+            analysis = analyze_resume(
+                resume_text,
+                job_description
+            )
 
         st.markdown("---")
         st.subheader("📊 AI Analysis Result")
 
-        st.write(analysis)
+        # ---------------------------
+        # ATS MATCH SCORE
+        # ---------------------------
+        score_match = re.search(
+            r"ATS Match Score:\s*(\d+)",
+            analysis,
+            re.IGNORECASE
+        )
+
+        if score_match:
+
+            ats_score = int(score_match.group(1))
+
+            st.metric(
+                label="ATS Match Score",
+                value=f"{ats_score}%"
+            )
+
+            st.progress(ats_score / 100)
+
+            if ats_score >= 80:
+                st.success("🔥 Strong Match")
+            elif ats_score >= 60:
+                st.warning("⚡ Moderate Match")
+            else:
+                st.error("❗ Low Match")
+
+        # ---------------------------
+        # MISSING SKILLS
+        # ---------------------------
+        missing_skills_match = re.search(
+            r"## Missing Skills(.*?)(##|$)",
+            analysis,
+            re.DOTALL | re.IGNORECASE
+        )
+
+        missing_skills = []
+
+        if missing_skills_match:
+
+            skills_text = missing_skills_match.group(1)
+
+            for line in skills_text.split("\n"):
+
+                line = line.strip()
+
+                if line.startswith("-"):
+                    missing_skills.append(
+                        line.replace("-", "").strip()
+                    )
+
+        if missing_skills:
+
+            st.markdown("### ⚠️ Missing Skills Detected")
+
+            cols = st.columns(
+                min(3, len(missing_skills))
+            )
+
+            for i, skill in enumerate(missing_skills):
+                cols[i % len(cols)].warning(skill)
+
+        # ---------------------------
+        # FULL ANALYSIS
+        # ---------------------------
+        st.markdown("### 📄 Full Analysis")
+
+        sections = analysis.split("\n\n")
+
+        for section in sections:
+
+            if section.strip():
+                st.markdown(section)
+
+        # ---------------------------
+        # PDF DOWNLOAD
+        # ---------------------------
+        pdf_path = generate_pdf_report(analysis)
+
+        with open(pdf_path, "rb") as pdf_file:
+
+            st.download_button(
+                label="📥 Download PDF Report",
+                data=pdf_file,
+                file_name="AI_Resume_Analysis_Report.pdf",
+                mime="application/pdf"
+            )
 
 # ---------------------------
-# FOOTER (OWNERSHIP SIGNATURE)
+# FOOTER
 # ---------------------------
 st.markdown("---")
-st.markdown("💡 Built with Python + AI by **Shubh Beniwal**")
+
+st.markdown(
+    "💡 Built with Python, Streamlit, Groq LLMs and ReportLab by **Shubh Beniwal**"
+)

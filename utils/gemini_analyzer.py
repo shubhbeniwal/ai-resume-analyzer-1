@@ -1,75 +1,3 @@
-# import google.generativeai as genai
-# from dotenv import load_dotenv
-# import os
-
-# load_dotenv()
-
-# genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
-
-# def analyze_resume(resume_text):
-
-#     model = genai.GenerativeModel("gemini-2.0-flash")
-
-#     prompt = f"""
-# You are an expert ATS Resume Reviewer.
-
-# Analyze this resume and provide:
-
-# 1. Professional Summary
-# 2. Strengths
-# 3. Weaknesses
-# 4. Missing Skills
-# 5. Suggestions for Improvement
-
-# Resume:
-
-# {resume_text}
-# """
-
-#     response = model.generate_content(prompt)
-
-#     return response.text
-
-
-# from huggingface_hub import InferenceClient
-# from dotenv import load_dotenv
-# import os
-
-# load_dotenv()
-
-# client = InferenceClient(
-#     token=os.getenv("HF_TOKEN")
-# )
-
-
-# def analyze_resume(resume_text):
-
-#     prompt = f"""
-# You are an expert ATS Resume Reviewer.
-
-# Analyze this resume and provide:
-
-# 1. Professional Summary
-# 2. Strengths
-# 3. Weaknesses
-# 4. Missing Skills
-# 5. Suggestions for Improvement
-
-# Resume:
-
-# {resume_text}
-# """
-
-#     response = client.text_generation(
-#         prompt,
-#         model="google/flan-t5-large",
-#         max_new_tokens=500
-#     )
-
-#     return response
-
-
 from groq import Groq
 from dotenv import load_dotenv
 import os
@@ -81,20 +9,50 @@ client = Groq(
 )
 
 
-def analyze_resume(resume_text):
+def analyze_resume(resume_text, job_description=""):
 
     prompt = f"""
-You are an expert ATS Resume Reviewer.
+You are a senior ATS Resume Reviewer and Technical Recruiter.
 
-Analyze this resume and provide:
+Analyze the resume against the provided job description.
 
-1. Professional Summary
-2. Strengths
-3. Weaknesses
-4. Missing Skills
-5. Suggestions for Improvement
+Provide your response in EXACTLY the following format:
 
-Resume:
+ATS Match Score: <score out of 100>
+
+## Professional Summary
+<summary>
+
+## Matching Skills
+- skill 1
+- skill 2
+- skill 3
+
+## Missing Skills
+- skill 1
+- skill 2
+
+## Strengths
+- point 1
+- point 2
+
+## Suggestions for Improvement
+- suggestion 1
+- suggestion 2
+- suggestion 3
+
+Rules:
+- ATS Match Score must be between 0 and 100.
+- Only list skills as "Missing Skills" if they are clearly absent from the resume.
+- If a skill is present through certifications, projects, experience, or coursework, treat it as a matching skill.
+- Do not explain missing skills inside the skill name.
+- Return clean bullet points only.
+
+JOB DESCRIPTION:
+
+{job_description}
+
+RESUME:
 
 {resume_text}
 """

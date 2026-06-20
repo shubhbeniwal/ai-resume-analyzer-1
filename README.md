@@ -3,6 +3,9 @@
 An AI-powered Resume Analyzer that evaluates resumes against job descriptions and provides intelligent feedback, skill gap analysis, and ATS-style scoring using Generative AI.
 
 ---
+# 🌐 Live Demo
+
+Example: https://ai-resume-analyzer-1-a5jjvpodez9o3vcu8ofpfr.streamlit.app/#ai-resume-analyzer
 
 ## 🚀 Features
 

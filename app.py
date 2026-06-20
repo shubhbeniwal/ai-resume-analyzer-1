@@ -16,34 +16,64 @@ st.set_page_config(
 # HEADER / BRANDING
 # ---------------------------
 st.title("📄 AI Resume Analyzer")
-st.markdown("### 🚀 Built by **Shubh Beniwal**")
-st.markdown("AI-powered resume evaluation using LLMs for ATS scoring and skill insights")
 
-st.markdown("---")
+st.markdown("""
+### AI-Powered Resume Evaluation Platform
+
+Get intelligent feedback on your resume using Large Language Models (LLMs).
+
+#### Features
+- ATS-style Resume Review
+- Skill Gap Analysis
+- Resume Improvement Suggestions
+- AI-Powered Resume Insights
+
+👨‍💻 Built by **Shubh Beniwal**
+""")
+
+st.divider()
 
 # ---------------------------
 # SIDEBAR (IDENTITY + PROJECT CONTEXT)
 # ---------------------------
 st.sidebar.title("👨‍💻 Developer")
 
-st.sidebar.markdown("**Shubh Beniwal**")
-st.sidebar.markdown("CSE (AI & Robotics), VIT Chennai")
+st.sidebar.markdown("""
+### Shubh Beniwal
 
-st.sidebar.markdown("---")
+**AI & Robotics Engineer**
 
-st.sidebar.subheader("📌 What this project does")
-st.sidebar.write("""
-- Parses PDF resumes  
-- Uses AI to analyze content  
-- Gives ATS-style feedback  
-- Identifies skill gaps  
+VIT Chennai
+
+---
+
+### Project
+
+AI Resume Analyzer
+
+Built to simulate how modern ATS and AI-powered hiring systems evaluate resumes.
+
+---
+
+### Tech Stack
+
+- Python
+- Streamlit
+- LLMs (Gemini / Groq)
+- PDF Processing
+
+---
 """)
 
-st.sidebar.markdown("---")
+st.sidebar.subheader("🔗 Connect")
 
-st.sidebar.subheader("🔗 Links")
-st.sidebar.write("GitHub: github.com/shubhbeniwal")
-st.sidebar.write("LinkedIn: linkedin.com/in/shubh-beniwal")
+st.sidebar.markdown(
+    "[GitHub](https://github.com/shubhbeniwal)"
+)
+
+st.sidebar.markdown(
+    "[LinkedIn](https://www.linkedin.com/in/shubh-beniwal/)"
+)
 
 # ---------------------------
 # MAIN UI

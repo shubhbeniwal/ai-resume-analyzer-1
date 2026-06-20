@@ -54,7 +54,7 @@ python app.py
 
 Create a .env file:
 
-GEMINI_API_KEY=your_api_key_here
+GROK_API_KEY=your_api_key_here
 📌 How it works
 User uploads resume (PDF)
 System extracts text

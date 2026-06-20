@@ -13,6 +13,25 @@ st.set_page_config(
     page_icon="📄",
     layout="wide"
 )
+st.markdown("""
+<style>
+.metric-card {
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: #1e293b;
+    border: 1px solid #334155;
+    margin-bottom: 1rem;
+}
+
+.section-card {
+    padding: 1rem;
+    border-radius: 12px;
+    background-color: #111827;
+    border: 1px solid #374151;
+    margin-bottom: 1rem;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # ---------------------------
 # HEADER
@@ -39,12 +58,12 @@ st.divider()
 # ---------------------------
 # SIDEBAR
 # ---------------------------
-st.sidebar.title("👨‍💻 Developer")
+st.sidebar.title("🚀 About the Creator")
 
 st.sidebar.markdown("""
 ### Shubh Beniwal
 
-**AI & ML Engineer**
+**AI Engineer | Software Developer**
 
 VIT Chennai Graduate | Passionate about AI, LLMs, NLP, and Software Engineering
 

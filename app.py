@@ -36,7 +36,7 @@ st.markdown("""
 # ---------------------------
 # HEADER
 # ---------------------------
-st.title("📄 AI Resume & Job Match Analyzer")
+st.title("📄 CareerLens AI – Resume Intelligence & Job Match Analyzer")
 
 st.markdown("""
 ### AI-Powered Resume Evaluation Platform

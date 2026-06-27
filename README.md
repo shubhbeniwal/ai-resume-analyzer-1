@@ -1,4 +1,4 @@
-# 🧠 AI Resume Analyzer
+# 🧠 CareerLens AI – Resume Intelligence & Job Match Analyzer
 
 An AI-powered Resume Analyzer that evaluates resumes against job descriptions and provides intelligent feedback, skill gap analysis, and ATS-style scoring using Generative AI.
 
